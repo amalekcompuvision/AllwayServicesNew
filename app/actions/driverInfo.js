@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 
 export const SET_DRIVER_INFO = 'SET_DRIVER_INFO';
 // export const SET_PENDING_ORDERS = 'SET_PENDING_ORDERS';
@@ -12,16 +13,45 @@ export const setDriverOrderCount = (driverId) => {
   return async (dispatch) => {
     const response = await fetch(
       `${baseUrl}/driverordercount.php?token=${token}&driver_id=${driverId}`);
-      'https://www.allwaytaxi.com/api/driverordercount.php?token=sb23oc-Moas|Kallwayu&driver_id=3'
+    'https://www.allwaytaxi.com/api/driverordercount.php?token=sb23oc-Moas|Kallwayu&driver_id=3'
     const resData = await response.json();
-      // console.log('coooooooooouuuuuuuuuuuuuuuuuuunttttttttttteeeeeeeeeerrrrrrrrrrrr');
-      // console.log(resData);
-      // console.log('coooooooooouuuuuuuuuuuuuuuuuuunttttttttttteeeeeeeeeerrrrrrrrrrrr');
-      
-      dispatch({
-        type: SET_DRIVER_INFO,
-        driverInfo: resData,
-      });
+    // console.log('coooooooooouuuuuuuuuuuuuuuuuuunttttttttttteeeeeeeeeerrrrrrrrrrrr');
+    // console.log(resData);
+    // console.log('coooooooooouuuuuuuuuuuuuuuuuuunttttttttttteeeeeeeeeerrrrrrrrrrrr');
+
+    dispatch({
+      type: SET_DRIVER_INFO,
+      driverInfo: resData,
+    });
+
+  };
+
+
+};
+
+export const setDriverStatus = (driverId, status) => {
+  // console.log(`https://www.allwaytaxi.com/api/driverlogin.php?token=${token}&password=${password}&email=${email}`)
+
+  return async (dispatch) => {
+    const response = await fetch(
+      `${baseUrl}/driverstatus.php?token=${token}&driver_id=${driverId}&status=${status}`);
+    console.log(`${baseUrl}/driverstatus.php?token=${token}&driver_id=${driverId}&status=${status}`);
+    const resData = await response.json();
+
+    if (resData.result == 0) {
+
+      Alert.alert(resData.message);
+
+    }
+    // console.log('coooooooooouuuuuuuuuuuuuuuuuuunttttttttttteeeeeeeeeerrrrrrrrrrrr');
+    // console.log(resData);
+    // console.log('coooooooooouuuuuuuuuuuuuuuuuuunttttttttttteeeeeeeeeerrrrrrrrrrrr');
+
+    // no need for dispatch since its
+    // dispatch({
+    //   type: SET_DRIVER_STATUS,
+    //   driverInfo: resData,
+    // });
 
   };
 

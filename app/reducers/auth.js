@@ -1,17 +1,17 @@
-import { LOGIN, SIGNUP, SET_USER_DATA, SET_STATUS } from '../actions/auth';
+import { LOGIN, SIGNUP, SET_USER_DATA, SET_STATUS, SET_DRIVER_INFO_LIST } from '../actions/auth';
 
 const initialState = {
   // token: null,
   userId: null,
   userInfo: {
-    fname:'malek',
-    lname:'saab',
-    phone:'702091082',
-    email:'faressaab@compu-vision.me',
-    id:3,
+    fname: 'malek',
+    lname: 'saab',
+    phone: '702091082',
+    email: 'faressaab@compu-vision.me',
+    id: 3,
   },
   status: false,
-  driverInfo: 'hi',
+  driverInfoList: 'hi',
 };
 
 export default (state = initialState, action) => {
@@ -23,23 +23,29 @@ export default (state = initialState, action) => {
         ...state,
         userId: action.userId,
       };
-      case SET_USER_DATA:
-        return {
-          // token: action.token,
-          ...state,
-          userInfo: action.userInfo,
-        };
-        case SIGNUP:
-          return {
-            // token: action.token,
-            ...state,
-            userId: action.userId,
-          };
-          case SET_STATUS:
-            return {
-              // token: action.token,
-              ...state,
+    case SET_USER_DATA:
+      return {
+        // token: action.token,
+        ...state,
+        userInfo: action.userInfo,
+      };
+    case SIGNUP:
+      return {
+        // token: action.token,
+        ...state,
+        userId: action.userId,
+      };
+    case SET_STATUS:
+      return {
+        // token: action.token,
+        ...state,
         status: action.statusChanged,
+      };
+    case SET_DRIVER_INFO_LIST:
+      return {
+        // token: action.token,
+        ...state,
+        driverInfoList: action.driverInfo,
       };
     default:
       return state;

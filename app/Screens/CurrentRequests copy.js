@@ -115,70 +115,6 @@ const CurrentRequests = props => {
             console.log('err msg is');
         }
     };
-    const {
-        width,
-        height,
-    } = Dimensions.get('window');
-    console.warn(width);
-    // console.warn(height);
-
-    function fontSizerBig(screenWidth) {
-        if (screenWidth >= 800) {
-            return 35;
-        } else if (screenWidth >= 370) {
-            return 20;
-        } else if (screenWidth >= 250) {
-            return 20;
-        } else {
-            return 12;
-        }
-    }
-    function fontSizerMedium(screenWidth) {
-        if (screenWidth >= 800) {
-            return 35;
-        } else if (screenWidth >= 370) {
-            return 18;
-        } else if (screenWidth >= 250) {
-            return 18;
-        } else {
-            return 12;
-        }
-    }
-    function fontSizerSmall(screenWidth) {
-        if (screenWidth >= 800) {
-            return 32;
-        } else if (screenWidth >= 370) {
-            return 16;
-        } else if (screenWidth >= 250) {
-            return 15;
-        } else {
-            return 12;
-        }
-    }
-    console.warn(marginTopScreenSize(width));
-
-    function marginTopScreenSize(screenWidth) {
-        if (screenWidth >= 420) {
-            return '8%';
-        } else if (screenWidth >= 390) {
-            return '25%';
-        } else if (screenWidth >= 250) {
-            return '40%';
-        } else {
-            return '40%';
-        }
-    }
-    function iconSizeRelative(screenWidth) {
-        if (screenWidth >= 800) {
-            return 60;
-        } else if (screenWidth >= 370) {
-            return 40;
-        } else if (screenWidth >= 250) {
-            return 30;
-        } else {
-            return 20;
-        }
-    }
 
     return (
         <ScrollView
@@ -197,13 +133,13 @@ const CurrentRequests = props => {
                             style={{ flex: 1 }}
                         >
                             <View
-                                style={{ flex: 1, backgroundColor: colors.darkGrey, marginTop: 20, marginHorizontal: 10, borderRadius: 10, padding: 10, paddingBottom: 0, }}
+                                style={{ flex: 1, backgroundColor: '#262626', marginTop: 20, marginHorizontal: 10, borderRadius: 10, padding: 10, paddingBottom: 0, }}
                             >
                                 <View style={{ flexDirection: 'column' }}>
                                     <View
                                         style={{
                                             // flex: 4,
-                                            height: height / 3,
+                                            height: Dimensions.get('window').height / 3,
                                             // backgroundColor: 'yellow',
                                         }}
                                     >
@@ -212,7 +148,7 @@ const CurrentRequests = props => {
                                             style={{
                                                 flexDirection: language == 'EN' ? 'row' : 'row-reverse',
                                                 alignItems: 'center',
-                                                marginVertical: 5,
+                                                marginVertical: 10,
                                             }}
                                         >
 
@@ -222,7 +158,7 @@ const CurrentRequests = props => {
                                                 style={{
                                                     ...styles.textDetails,
                                                     color: 'white',
-                                                    fontSize: fontSizerBig(width),
+                                                    fontSize: 25,
                                                     marginLeft: 10
                                                 }}
                                             >
@@ -248,7 +184,7 @@ const CurrentRequests = props => {
                                                 style={{
                                                     ...styles.textDetails,
                                                     color: 'white',
-                                                    fontSize: fontSizerMedium(width),
+                                                    fontSize: 20,
                                                     marginLeft: 10
                                                 }}
                                             >
@@ -304,7 +240,7 @@ const CurrentRequests = props => {
                                             <Icon name={'clock'} size={30} style={{ color: 'white' }} />
 
                                             <Text
-                                                style={{ ...styles.textDetails, fontSize: fontSizerMedium(width), marginLeft: 10, fontWeight: 'normal', color: 'white' }}
+                                                style={{ ...styles.textDetails, fontSize: 25, marginLeft: 10, fontWeight: 'normal', color: 'white' }}
                                             >
                                                 {pickUp}{': '} {order.pickup}
                                             </Text>
@@ -318,7 +254,7 @@ const CurrentRequests = props => {
 
                                             <Icon name={'car-hatchback'} size={30} style={{ color: 'white' }} />
                                             <Text
-                                                style={{ ...styles.textDetails, fontSize: fontSizerMedium(width), color: 'white', marginLeft: 10, fontWeight: 'normal' }}
+                                                style={{ ...styles.textDetails, fontSize: 25, color: 'white', marginLeft: 10, fontWeight: 'normal' }}
                                             >
                                                 {destination}{': '} {order.destination}
                                             </Text>
@@ -337,13 +273,13 @@ const CurrentRequests = props => {
                                             <Icon name={'calendar-month'} size={30} style={{ color: 'white' }} />
 
                                             <Text
-                                                style={{ ...styles.textDetails, marginLeft: 10, color: 'white', fontSize: fontSizerSmall(width) }}
+                                                style={{ ...styles.textDetails, marginLeft: 10, color: 'white', fontSize: 18 }}
                                             >
                                                 {orderDate}{': '} {order.order_date}
                                             </Text>
                                             <Icon name={'clock'} size={30} style={{ color: 'white', marginLeft: 10 }} />
                                             <Text
-                                                style={{ ...styles.textDetails, marginLeft: 0, color: 'white', fontSize: fontSizerSmall(width) }}
+                                                style={{ ...styles.textDetails, marginLeft: 0, color: 'white', fontSize: 18 }}
                                             >
                                                 {order.order_time}
                                             </Text>
@@ -369,19 +305,19 @@ const CurrentRequests = props => {
                                     </View> */}
                                         <Divider />
                                         <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white', fontSize: fontSizerSmall(width) }}
+                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white' }}
                                         >
                                             {OrderPrice}{': '} {order.orderprice}
                                         </Text>
                                         <Divider />
                                         <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white', fontSize: fontSizerSmall(width) }}
+                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white' }}
                                         >
                                             {DeliveryPrice}{': '} {order.deliveryprice}
                                         </Text>
                                         <Divider />
                                         <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white', fontSize: fontSizerSmall(width) }}
+                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white' }}
                                         >
                                             {Commission}{': '} {order.commission}
                                         </Text>
@@ -389,7 +325,7 @@ const CurrentRequests = props => {
 
 
                                     <View
-                                        style={{ flex: 1, height: height / 10, width: width - 20, flexDirection: 'row', marginTop: marginTopScreenSize(width), alignSelf: 'center', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, overflow: 'hidden' }}
+                                        style={{ flex: 1, height: Dimensions.get('window').height / 10, width: Dimensions.get('window').width - 20, flexDirection: 'row', marginTop: Dimensions.get('window').height / 10, alignSelf: 'center', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, overflow: 'hidden' }}
                                     >
                                         <TouchableOpacity
                                             style={{
@@ -407,9 +343,9 @@ const CurrentRequests = props => {
                                             }
                                         >
 
-                                            <Icon name={'eye'} size={iconSizeRelative(width)} style={{ alignSelf: 'center', color: 'white' }} />
+                                            <Icon name={'eye'} size={44} style={{ alignSelf: 'center', color: 'white' }} />
                                             <Text
-                                                style={{ ...styles.textStyle, fontSize: fontSizerMedium(width), fontFamily: 'open-sans-bold' }}
+                                                style={{ ...styles.textStyle, fontSize: 18, fontFamily: 'open-sans-bold' }}
                                             >{Details}</Text>
                                         </TouchableOpacity>
                                         {/* <TouchableOpacity
@@ -437,8 +373,8 @@ const CurrentRequests = props => {
                                         >
 
 
-                                            <Icon name={'arrow-left-drop-circle-outline'} size={iconSizeRelative(width)} style={{ alignSelf: 'center', color: 'white' }} />
-                                            <Text style={{ ...styles.textStyle, fontSize: fontSizerMedium(width) }}>{Complete}</Text>
+                                            <Icon name={'arrow-left-drop-circle-outline'} size={44} style={{ alignSelf: 'center', color: 'white' }} />
+                                            <Text style={{ ...styles.textStyle, fontSize: 18 }}>{Complete}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>

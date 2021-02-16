@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -25,7 +26,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const RootStack = createStackNavigator();
 
+
 const MyApp = prop => {
+    const language = useSelector(state => state.application.language);
+
 
     return (
         <NavigationContainer>
@@ -33,111 +37,115 @@ const MyApp = prop => {
 
             <RootStack.Navigator
             // mode="modal"
-             //headerMode="none"
+            //headerMode="none"
             // initialRouteName="Menu"
             >
                 <RootStack.Screen
-                options={{
-                    headerShown: false,
-                }}
-                name="SplashScreen"
-                 component={SplashScreen} />
+                    options={{
+                        headerShown: false,
+                    }}
+                    name="SplashScreen"
+                    component={SplashScreen} />
                 <RootStack.Screen
-                options={{
-                    headerShown: false,
-                }}
-                name="language Choose"
-                 component={languageChoose} />
+                    options={{
+                        headerShown: false,
+                    }}
+                    name="language Choose"
+                    component={languageChoose} />
                 {/* <RootStack.Screen name="Login" component={Login} /> */}
                 <RootStack.Screen
-                options={{
-                    headerShown: false,
-                    headerStyle: {
-                        ...styles.header,
-                      },
+                    options={{
+                        headerShown: false,
+                        headerStyle: {
+                            ...styles.header,
+                        },
 
-                      headerTitleStyle: {
-                        ...styles.headerTitle,  
-                      },
-                      headerTintColor: colors.white,                      
+                        headerTitleStyle: {
+                            ...styles.headerTitle,
+                        },
+                        headerTintColor: colors.white,
 
 
-                }}
-                name="Login" component={AuthScreen} />
+                    }}
+                    name="Login" component={AuthScreen} />
                 <RootStack.Screen
-                options={{
-                    headerShown: false,
-                    title: 'My home',
-                    headerStyle: {
-                        ...styles.header,
-                        
-                      },
-                    
-                      headerTitleStyle: {
-                        ...styles.headerTitle,  
-                      },
-                      headerTintColor: colors.white,
-                      
-                      
-                }}
-                name="Home" component={Home} />
-                <RootStack.Screen
-                options={{
-                    headerStyle: {
-                        ...styles.header,
-                      },
-                      headerTintColor: colors.white,
-                      
-                }}
-                name="Current Requests" component={CurrentRequests} />
-                <RootStack.Screen
-                options={{
-                    headerStyle: {
-                        ...styles.header,
-                      },
-                      headerTintColor: colors.white,
-                      
-                }}
-                name="Completed Requests" component={CompletedRequests} />
+                    options={{
+                        headerShown: false,
+                        title: 'My home',
+                        headerStyle: {
+                            ...styles.header,
 
+                        },
+
+                        headerTitleStyle: {
+                            ...styles.headerTitle,
+                        },
+                        headerTintColor: colors.white,
+
+
+                    }}
+                    name="Home" component={Home} />
                 <RootStack.Screen
-                options={{
-                    headerStyle: {
-                        ...styles.header,
-                      },
-                      headerTitleStyle: {
-                        ...styles.headerTitle,  
-                      },
-                      headerTintColor: colors.white,
+                    options={{
+                        title: language == 'EN' ? 'Current Requests' : 'الطلبات الجارية',
+                        headerStyle: {
+                            ...styles.header,
+                        },
+                        headerTintColor: colors.white,
 
-                
-                }}
-                name="Incoming Orders" component={PendingRequests} />
+                    }}
+                    name="Current Requests" component={CurrentRequests} />
+                <RootStack.Screen
+                    options={{
+                        title: language == 'EN' ? 'Completed Requests' : 'الطلبات المنتهية',
+                        headerStyle: {
+                            ...styles.header,
+                        },
+                        headerTintColor: colors.white,
 
+                    }}
+                    name="Completed Requests" component={CompletedRequests} />
 
                 <RootStack.Screen
-                options={{
-                    headerStyle: {
-                        ...styles.header,
-                      },
-                      headerTitleStyle: {
-                        ...styles.headerTitle,  
-                      },
-                      headerTintColor: colors.white,
-                }}
-                name="Profile" component={Profile} />
+                    options={{
+                        title: language == 'EN' ? 'Pendng Requests' : 'الطلبات الواردة',
+                        headerStyle: {
+                            ...styles.header,
+                        },
+                        headerTitleStyle: {
+                            ...styles.headerTitle,
+                        },
+                        headerTintColor: colors.white,
+
+
+                    }}
+                    name="Incoming Orders" component={PendingRequests} />
+
+
                 <RootStack.Screen
-                options={{
-                    headerStyle: {
-                        ...styles.header
-                      },
-                      headerTitleStyle: {
-                        ...styles.headerTitle,  
-                      },
-                      headerTintColor: colors.white,
-                }}
-                name="OrderDetails" component={OrderDetails} />
-               
+                    options={{
+
+                        headerStyle: {
+                            ...styles.header,
+                        },
+                        headerTitleStyle: {
+                            ...styles.headerTitle,
+                        },
+                        headerTintColor: colors.white,
+                    }}
+                    name="Profile" component={Profile} />
+                <RootStack.Screen
+                    options={{
+                        headerStyle: {
+                            ...styles.header
+                        },
+                        headerTitleStyle: {
+                            ...styles.headerTitle,
+                        },
+                        headerTintColor: colors.white,
+                    }}
+                    name="OrderDetails" component={OrderDetails} />
+
 
 
             </RootStack.Navigator>
@@ -159,15 +167,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'red',
     },
-    header:{
+    header: {
         backgroundColor: colors.black,
     },
-    headerTitle:{
-        color:colors.white,
+    headerTitle: {
+        color: colors.white,
     },
-    Icon:{
+    Icon: {
         color: 'white',
-        marginTop:0,
+        marginTop: 0,
 
     },
 });

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableHighlight, Alert } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableHighlight, Alert, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Block from '../Components/Block';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,6 +44,12 @@ const OrderDetails = (props) => {
     let status = language == 'EN' ? 'status' : 'الحالة ';
     let total = language == 'EN' ? 'total' : 'المجموع ';
     let notes = language == 'EN' ? 'notes' : 'ملاحظات ';
+    let Yes = language == 'EN' ? 'Yes' : 'نعم';
+    let Cancel = language == 'EN' ? 'Cancel' : 'إلغاء';
+    let WasPaid = language == 'EN' ? 'Was the order paid ?' : 'هل كان الطلب مدفوع ؟';
+    let NotPaid = language == 'EN' ? 'Not Paid' : 'ليس مدفوع';
+    let Paid = language == 'EN' ? 'Paid' : 'مدفوع';
+    let UWannaSTart = language == 'EN' ? 'Do you want to start ?' : 'هل تريد البدأ ؟';
 
 
 
@@ -100,7 +106,7 @@ const OrderDetails = (props) => {
     // order id/ order date/  order price /total /ispaid /order time
     return (
 
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={{ ...styles.Block, alignItems: language == 'EN' ? 'flex-start' : 'flex-end', }}>
 
                 <Text style={styles.textStyle}>{orderId}{': '}{orderDetails.id}</Text>
@@ -133,7 +139,7 @@ const OrderDetails = (props) => {
                         }}
                     >
                         <View>
-                            <Icon name={orderDetails.status === 'pending' ? 'arrow-right-drop-circle' : 'stop-circle'} size={40} style={{ alignSelf: 'center', color: 'white' }} />
+                            <Icon name={orderDetails.status === 'pending' ? 'arrow-right-drop-circle' : 'arrow-left-drop-circle-outline'} size={40} style={{ alignSelf: 'center', color: 'white' }} />
                             <Text style={styles.textStyle}>{orderDetails.status === 'pending' ? Start : Complete}</Text>
                         </View>
                     </TouchableHighlight>
@@ -154,36 +160,37 @@ const OrderDetails = (props) => {
                     <View style={styles.modalView}>
                         {orderDetails.status === 'pending'
                             ?
-                            <Text style={{ ...styles.textStyle, color: 'black' }}>Do you want to start</Text>
+                            <Text style={{ ...styles.textStyle, color: 'black' }}>{UWannaSTart}</Text>
                             :
-                            <Text style={{ ...styles.textStyle, color: 'black' }}>was the order Paid/Not paid?</Text>
+                            <Text style={{ ...styles.textStyle, color: 'black' }}>{WasPaid}</Text>
 
                         }
 
                         <View
                             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
                         >
+                            <TouchableHighlight
+                                style={{ ...styles.openButton, backgroundColor: colors.green, width: 100, marginHorizontal: 10 }}
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    handleOrderStatus(orderDetails.id, driverInfo.id, orderDetails.status === 'pending' ? 'running' : 'completed');
+                                }}
+                            >
+                                <Text style={styles.textStyle}>{orderDetails.status === 'pending' ? Yes : NotPaid}</Text>
+                            </TouchableHighlight>
                             {orderDetails.status === 'pending' ? null :
                                 <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: colors.green, width: 100, marginHorizontal: 10 }}
+                                    style={{ ...styles.openButton, backgroundColor: colors.primary, width: 100, marginHorizontal: 10 }}
                                     onPress={() => {
                                         setModalVisible(!modalVisible);
                                         handleOrderStatus(orderDetails.id, driverInfo.id, orderDetails.status === 'pending' ? 'running' : 'completed');
                                         handleOrderStatusIfPaid(1, orderDetails.id);
                                     }}
                                 >
-                                    <Text style={styles.textStyle}>{'Paid'}</Text>
+                                    <Text style={styles.textStyle}>{Paid}</Text>
                                 </TouchableHighlight>
                             }
-                            <TouchableHighlight
-                                style={{ ...styles.openButton, backgroundColor: colors.primary, width: 100, marginHorizontal: 10 }}
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                    handleOrderStatus(orderDetails.id, driverInfo.id, orderDetails.status === 'pending' ? 'running' : 'completed');
-                                }}
-                            >
-                                <Text style={styles.textStyle}>{orderDetails.status === 'pending' ? 'Yes' : 'Not paid'}</Text>
-                            </TouchableHighlight>
+
 
                             <TouchableHighlight
                                 style={{ ...styles.openButton, backgroundColor: colors.red, width: 100, marginHorizontal: 10 }}
@@ -191,13 +198,13 @@ const OrderDetails = (props) => {
                                     setModalVisible(!modalVisible);
                                 }}
                             >
-                                <Text style={styles.textStyle}>Cancel</Text>
+                                <Text style={styles.textStyle}>{Cancel}</Text>
                             </TouchableHighlight>
                         </View>
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ScrollView>
 
 
 

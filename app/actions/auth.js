@@ -2,7 +2,7 @@ export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const SET_USER_DATA = 'SET_USER_DATA';
 export const SET_STATUS = 'SET_STATUS';
-export const SET_DRIVER_INFO = 'SET_DRIVER_INFO';
+export const SET_DRIVER_INFO_LIST = 'SET_DRIVER_INFO_LIST';
 
 import { useState } from 'react';
 import { clockRunning } from 'react-native-reanimated';
@@ -102,7 +102,7 @@ export const setDriverInfo = (driverID) => {
       `${baseUrl}/driverinfo.php?token=${token}&driver_id=${driverID}`);
     const resData = await response.json();
     dispatch({
-      type: SET_USER_DATA,
+      type: SET_DRIVER_INFO_LIST,
       driverInfo: resData,
     });
   };

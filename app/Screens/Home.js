@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eqeqeq */
 /* eslint-disable space-infix-ops */
@@ -34,6 +36,12 @@ const Home = props => {
   const language = useSelector(state => state.application.language);
   const navigation = useNavigation();
   const userInfo = useSelector(state => state.auth.userInfo);
+
+  const driverInfoFromRedux = useSelector(state => state.auth.driverInfoList);
+  // const [driverInfo, setDriverInfo] = useState(driverInfoFromRedux.status);
+  // console.log('useeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerInfooooooooooooooooooooo')
+  // console.warn(driverInfoFromRedux.status);
+  // console.log('useeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerInfooooooooooooooooooooo')
   const counters = useSelector(state => state.driverinfo.ordersCount);
   const [error, setError] = useState();
   // console.log('useseeeeeeeeeeeeeeeeleeeeeeector');
@@ -56,6 +64,12 @@ const Home = props => {
   let Yes = language == 'EN' ? 'Yes' : 'نعم';
   let logoutAlertTitle = language == 'EN' ? 'Logout!!' : 'تسجيل الخروج';
   let logoutAlertBody = language == 'EN' ? 'Are you sure you want to Logout?' : 'هل تريد تأكيد تسجيل الخروج؟';
+  let startShift = language == 'EN' ? 'Start Shift ?' : 'بدأ المناوبة؟';
+  let endShift = language == 'EN' ? 'End Shift ?' : 'انهاء المناوبة؟';
+  let startShiftBody = language == 'EN' ? 'Are you sure you want to Start Shift ?' : 'هل بالتأكيد تريد بدأ المناوبة؟';
+  let endShiftBody = language == 'EN' ? 'End Shift ?' : 'هل بالتأكيد تريد انهاء المناوبة؟';
+
+
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -66,7 +80,11 @@ const Home = props => {
 
   useEffect(() => {
     //Update the state you want to be updated
+
   }, [isFocused])
+
+
+
   let id = typeof userInfo.id == undefined ? 'id' : userInfo.id;
   let fname = typeof userInfo.fname == undefined ? 'name' : userInfo.fname;
   let lname = typeof userInfo.lname == undefined ? 'lname' : userInfo.lname;
@@ -85,11 +103,70 @@ const Home = props => {
   useEffect(() => {
     setCounters(id);
   }, [setCounters, id]);
+  useEffect(() => {
+    setDriverBigInfo(id);
+  }, [setDriverBigInfo, id]);
+
+
+  const {
+    width,
+    height,
+  } = Dimensions.get('window');
+
+  const marginTopScreenSize = (screenWidth) => {
+    if (screenWidth >= 420) {
+      return '5%';
+    } else if (screenWidth >= 390) {
+      return '8%';
+    } else if (screenWidth >= 250) {
+      return '20%';
+    } else {
+      return '40%';
+    }
+  }
 
   const setCounters = async (id) => {
     let action;
 
     action = driverInfoActions.setDriverOrderCount(
+      id,
+    );
+    try {
+      await dispatch(action);
+      // console.log('set counter started working from homescreen');
+
+    } catch (err) {
+      // console.log('set counter faced problem in home screen');
+      setError(err.message);
+      console.log(err.message);
+    }
+  };
+  const setDriverStatus = async (id, status) => {
+    let action;
+
+    action = driverInfoActions.setDriverStatus(
+      id,
+      status
+    );
+    try {
+      await dispatch(action);
+      // console.log('set counter started working from homescreen');
+
+    } catch (err) {
+      // console.log('set counter faced problem in home screen');
+      setError(err.message);
+      console.log(err.message);
+    }
+    setDriverBigInfo(id);
+    // setDriverInfo(!driverInfo);
+    console.log('pressed');
+  };
+
+
+  const setDriverBigInfo = async (id) => {
+    let action;
+
+    action = authActions.setDriverInfo(
       id,
     );
     try {
@@ -145,6 +222,8 @@ const Home = props => {
       ]
     );
   };
+
+
 
   return (
 
@@ -290,22 +369,49 @@ const Home = props => {
         </TouchableOpacity>
 
 
-        <View style={{ ...styles.ButtonsRow, flexDirection: language == 'EN' ? 'row' : 'row-reverse' }}>
+        <View style={{ ...styles.ButtonsRow, flexDirection: language == 'EN' ? 'row' : 'row-reverse', alignItems: 'center', marginTop: marginTopScreenSize(width) }}>
           <ButtonBlock
 
             style={[styles.Block, {
               justifyContent: language == 'EN' ? 'flex-start' : 'flex-end',
+              height: 0,
               // eslint-disable-next-line no-trailing-spaces
-              backgroundColor: isShiftStarted ? 'red' : 'green',
+              backgroundColor: driverInfoFromRedux.status == 0 ? 'red' : 'green',
             }]}
+            backgroundColor={driverInfoFromRedux.status == 0 ? 'green' : 'red'}
+            iconName={driverInfoFromRedux.status == 0 ? 'play' : 'stop'}
             icon={true}
-          // onPress={()=>{
-          //     setStatusHandler(userInfo.id, !isShiftStarted);
+            onPress={() => {
 
-          // }}
+              Alert.alert(
+                driverInfoFromRedux.status == 0 ? startShift : endShift,
+                driverInfoFromRedux.status == 0 ? startShiftBody : endShiftBody,
+                [
+                  { text: No, style: 'cancel' },
+                  {
+                    text: Yes,
+                    onPress: () => {
+                      setDriverStatus(
+                        userInfo.id,
+                        driverInfoFromRedux.status == 0 ? 1 : 0 ,
+                      );
+
+                    }
+                  },
+                ]
+              );
+
+              // setDriverStatus(
+              //   userInfo.id,
+              //   driverInfo == 0 ? 1 : 0 ,
+              // );
+
+
+            }}
           ></ButtonBlock>
 
           <Block
+            style={{ height: '100%', }}
             icon={'account-convert'}
             size={50}
             title={CurrentOrders}
@@ -328,6 +434,7 @@ const Home = props => {
 
 
           <Block
+            style={{ height: '100%', }}
             icon={'history'}
             title={IncomingOrders}
             badge={pendingCounter}

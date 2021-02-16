@@ -59,7 +59,72 @@ const CompletedRequests = props => {
             console.log('err msg is');
         }
     };
+    const {
+        width,
+        height,
+    } = Dimensions.get('window');
+    console.warn(width);
+    // console.warn(height);
 
+    function fontSizerBig(screenWidth) {
+        if (screenWidth >= 800) {
+            return 35;
+        } else if (screenWidth >= 370) {
+            return 20;
+        } else if (screenWidth >= 250) {
+            return 20;
+        } else {
+            return 12;
+        }
+    }
+    function fontSizerMedium(screenWidth) {
+        if (screenWidth >= 800) {
+            return 35;
+        } else if (screenWidth >= 370) {
+            return 18;
+        } else if (screenWidth >= 250) {
+            return 18;
+        } else {
+            return 12;
+        }
+    }
+    function fontSizerSmall(screenWidth) {
+        if (screenWidth >= 800) {
+            return 32;
+        } else if (screenWidth >= 370) {
+            return 16;
+        } else if (screenWidth >= 250) {
+            return 12;
+        } else {
+            return 12;
+        }
+    }
+    function marginTopScreenSize(screenWidth) {
+        if (screenWidth >= 800) {
+            return '5%';
+        }
+        else if (screenWidth >= 480) {
+            return '0%';
+        }
+        else if (screenWidth >= 370) {
+            return '8%';
+        } else if (screenWidth >= 250) {
+            return '25%';
+        } else {
+            return '35%';
+        }
+    }
+    function iconSizeRelative(screenWidth) {
+        if (screenWidth >= 800) {
+            return 60;
+        } else if (screenWidth >= 370) {
+            return 40;
+        } else if (screenWidth >= 250) {
+            return 30;
+        } else {
+            return 20;
+        }
+    }
 
 
 
@@ -69,120 +134,120 @@ const CompletedRequests = props => {
             style={styles.screen}
         >
             <View style={{ flex: 1, }}>
-                {completedOrders == null 
-                ?
-                <View
-                style={{flex:1, backgroundColor:'black'}}
-                ></View>
-                :
-                completedOrders.map((order) => {
-                    // console.log(order);
-                    return (
+                {completedOrders == null
+                    ?
+                    <View
+                        style={{ flex: 1, backgroundColor: 'black' }}
+                    ></View>
+                    :
+                    completedOrders.map((order) => {
+                        // console.log(order);
+                        return (
 
 
-                        <View
-                            key={order.id}
-                            style={{ flex: 1 }}
-                        >
                             <View
-                                style={{ flex: 1, backgroundColor: '#262626', marginTop: 20, marginHorizontal: 10, borderRadius: 10, padding: 10, paddingBottom: 0, }}
+                                key={order.id}
+                                style={{ flex: 1 }}
                             >
-                                <View style={{ flexDirection: 'column' }}>
-                                    <View
-                                        style={{
-                                            // flex: 4,
-                                            height: Dimensions.get('window').height / 4 + 20,
-                                            // backgroundColor: 'yellow',
-                                        }}
-                                    >
-
+                                <View
+                                    style={{ flex: 1, backgroundColor: '#262626', marginTop: 20, marginHorizontal: 10, borderRadius: 10, padding: 10, paddingBottom: 0, }}
+                                >
+                                    <View style={{ flexDirection: 'column' }}>
                                         <View
                                             style={{
-                                                flexDirection: language == 'EN' ? 'row' : 'row-reverse',
-                                                alignItems: 'center',
-                                                marginVertical: 10,
+                                                // flex: 4,
+                                                height: height / 3,
+                                                // backgroundColor: 'yellow',
                                             }}
                                         >
 
-                                            <Icon name={'face-profile'} size={30} style={{ color: 'white', marginRight: 10 }} />
-
-                                            <Text
+                                            <View
                                                 style={{
-                                                    ...styles.textDetails,
-                                                    color: 'white',
-                                                    fontSize: 25
+                                                    flexDirection: language == 'EN' ? 'row' : 'row-reverse',
+                                                    alignItems: 'center',
+                                                    marginVertical: 5,
                                                 }}
                                             >
-                                                {/* {'Fares Saab'} */}
-                                                {CLientName}
-                                                {': '}
-                                                {order.clientname}
-                                            </Text>
-                                        </View>
+
+                                                <Icon name={'face-profile'} size={30} style={{ color: 'white' }} />
+
+                                                <Text
+                                                    style={{
+                                                        ...styles.textDetails,
+                                                        color: 'white',
+                                                        fontSize: fontSizerBig(width),
+                                                    }}
+                                                >
+                                                    {/* {'Fares Saab'} */}
+                                                    {CLientName}
+                                                    {': '}
+                                                    {order.clientname}
+                                                </Text>
+                                            </View>
 
 
 
 
 
-                                        <Divider />
-                                        <View
-                                            style={{
-                                                flexDirection: language == 'EN' ? 'row' : 'row-reverse',
-                                                alignItems: 'center',
-                                                marginBottom: 10
-                                            }}
+                                            <Divider />
+                                            <View
+                                                style={{
+                                                    flexDirection: language == 'EN' ? 'row' : 'row-reverse',
+                                                    alignItems: 'center',
+                                                    marginBottom: 10
+                                                }}
 
-                                        >
-
-                                            <Icon name={'clock'} size={30} style={{ color: 'white' }} />
-
-                                            <Text
-                                                style={{ ...styles.textDetails, fontSize: 25, marginLeft: 10, fontWeight: 'normal', color: 'white' }}
                                             >
-                                                {pickUp}{': '} {order.pickup}
-                                            </Text>
-                                        </View>
-                                        <Divider />
-                                        <View
-                                            style={{
-                                                flexDirection: language == 'EN' ? 'row' : 'row-reverse', marginBottom: 10,
-                                            }}
-                                        >
 
-                                            <Icon name={'car-hatchback'} size={30} style={{ color: 'white' }} />
-                                            <Text
-                                                style={{ ...styles.textDetails, fontSize: 25, color: 'white', marginLeft: 10, fontWeight: 'normal' }}
+                                                <Icon name={'clock'} size={30} style={{ color: 'white' }} />
+
+                                                <Text
+                                                    style={{ ...styles.textDetails, fontSize: fontSizerBig(width), marginLeft: 10, fontWeight: 'normal', color: 'white' }}
+                                                >
+                                                    {pickUp}{': '} {order.pickup}
+                                                </Text>
+                                            </View>
+                                            <Divider />
+                                            <View
+                                                style={{
+                                                    flexDirection: language == 'EN' ? 'row' : 'row-reverse', marginBottom: 10,
+                                                }}
                                             >
-                                                {destination}{': '} {order.destination}
-                                            </Text>
-                                        </View>
 
-                                        <Divider />
+                                                <Icon name={'car-hatchback'} size={30} style={{ color: 'white' }} />
+                                                <Text
+                                                    style={{ ...styles.textDetails, fontSize: fontSizerBig(width), color: 'white', marginLeft: 10, fontWeight: 'normal' }}
+                                                >
+                                                    {destination}{': '} {order.destination}
+                                                </Text>
+                                            </View>
 
-                                        <View
-                                            style={{
-                                                flexDirection: language == 'EN' ? 'row' : 'row-reverse',
-                                                marginBottom: 5,
-                                                marginRight: language == 'EN' ? 70 : -70,
-                                                alignItems: 'center',
-                                            }}
-                                        >
-                                            <Icon name={'calendar-month'} size={30} style={{ color: 'white' }} />
+                                            <Divider />
 
-                                            <Text
-                                                style={{ ...styles.textDetails, marginLeft: 10, color: 'white', fontSize: 18 }}
+                                            <View
+                                                style={{
+                                                    flexDirection: language == 'EN' ? 'row' : 'row-reverse',
+                                                    marginBottom: 5,
+                                                    marginRight: language == 'EN' ? 70 : -70,
+                                                    alignItems: 'center',
+                                                }}
                                             >
-                                                {orderDate}{': '} {order.order_date}
-                                            </Text>
-                                            <Icon name={'clock'} size={30} style={{ color: 'white', marginLeft: 10 }} />
-                                            <Text
-                                                style={{ ...styles.textDetails, marginLeft: 0, color: 'white', fontSize: 18 }}
-                                            >
-                                                {order.order_time}
-                                            </Text>
+                                                <Icon name={'calendar-month'} size={30} style={{ color: 'white' }} />
 
-                                        </View>
-                                        {/* <Divider />
+                                                <Text
+                                                    style={{ ...styles.textDetails, marginLeft: 10, color: 'white', fontSize: fontSizerSmall(width) }}
+                                                >
+                                                    {orderDate}{': '} {order.order_date}
+                                                </Text>
+                                                <Icon name={'clock'} size={30} style={{ color: 'white', marginLeft: 10 }} />
+                                                <Text
+                                                    style={{ ...styles.textDetails, marginLeft: 0, color: 'white', fontSize: fontSizerSmall(width) }}
+                                                >
+                                                    {order.order_time}
+                                                </Text>
+
+                                            </View>
+                                            {/* <Divider />
                                         <View
                                             style={{
                                                 flexDirection: language == 'EN' ? 'row' : 'row-reverse',
@@ -200,57 +265,57 @@ const CompletedRequests = props => {
                                             </Text>
 
                                         </View> */}
-                                        <Divider />
-                                        <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white' }}
-                                        >
-                                            {OrderPrice}{': '} {order.orderprice}
-                                        </Text>
-                                        <Divider />
-                                        <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white' }}
-                                        >
-                                            {DeliveryPrice}{': '} {order.deliveryprice}
-                                        </Text>
-                                        <Divider />
-                                        <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white' }}
-                                        >
-                                            {Commission}{': '} {order.commission}
-                                        </Text>
-                                    </View>
-
-
-                                    <View
-                                        style={{ flex: 1, height: Dimensions.get('window').height / 12, width: Dimensions.get('window').width - 20, flexDirection: 'row', marginTop: 75, alignSelf: 'center', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, overflow: 'hidden' }}
-                                    >
-                                        <TouchableOpacity
-                                            style={{
-                                                height: '100%',
-                                                width: (Dimensions.get('window').width - 20),
-                                                backgroundColor: '#db8e3b',
-                                                justifyContent: 'center',
-                                                paddingVertical: 0,
-                                                elevation: 10,
-                                                // borderRadius:10,
-                                            }}
-
-                                            onPress={
-                                                () => {
-                                                    navigation.navigate('OrderDetails');
-                                                    handleSetOrderDetails(order.id); // cahnge it later to order.id from redux, like next line:
-                                                    //   console.log(order.id);
-                                                    // handleSetOrders(id, 'pending');
-                                                }
-                                            }
-                                        >
-
-                                            <Icon name={'eye'} size={40} style={{ alignSelf: 'center', color: 'white' }} />
+                                            <Divider />
                                             <Text
-                                                style={{ ...styles.textStyle, fontFamily: 'open-sans-bold' }}
-                                            >{Details}</Text>
-                                        </TouchableOpacity>
-                                        {/* <TouchableOpacity
+                                                style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white', fontSize: fontSizerSmall(width) }}
+                                            >
+                                                {OrderPrice}{': '} {order.orderprice}
+                                            </Text>
+                                            <Divider />
+                                            <Text
+                                                style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white', fontSize: fontSizerSmall(width) }}
+                                            >
+                                                {DeliveryPrice}{': '} {order.deliveryprice}
+                                            </Text>
+                                            <Divider />
+                                            <Text
+                                                style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: 'white', fontSize: fontSizerSmall(width) }}
+                                            >
+                                                {Commission}{': '} {order.commission}
+                                            </Text>
+                                        </View>
+
+
+                                        <View
+                                            style={{ flex: 1, height: height / 10, width: width - 20, flexDirection: 'row', marginTop: marginTopScreenSize(width), alignSelf: 'center', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, overflow: 'hidden' }}
+                                        >
+                                            <TouchableOpacity
+                                                style={{
+                                                    height: '100%',
+                                                    width: (width - 20),
+                                                    backgroundColor: '#db8e3b',
+                                                    justifyContent: 'center',
+                                                    paddingVertical: 0,
+                                                    elevation: 10,
+                                                    // borderRadius:10,
+                                                }}
+
+                                                onPress={
+                                                    () => {
+                                                        handleSetOrderDetails(order.id); // cahnge it later to order.id from redux, like next line:
+                                                        navigation.navigate('OrderDetails');
+                                                        //   console.log(order.id);
+                                                        // handleSetOrders(id, 'pending');
+                                                    }
+                                                }
+                                            >
+
+                                                <Icon name={'eye'} size={iconSizeRelative(width)} style={{ alignSelf: 'center', color: 'white' }} />
+                                                <Text
+                                                    style={{ ...styles.textStyle, fontFamily: 'open-sans-bold', fontSize: fontSizerMedium(width), }}
+                                                >{Details}</Text>
+                                            </TouchableOpacity>
+                                            {/* <TouchableOpacity
                                             style={{ ...styles.openButton, justifyContent: 'center', backgroundColor: "green", alignSelf: 'center', width: (Dimensions.get('window').width - 20) / 2 }}
                                             onPress={() => {
                                                 setModalVisible(!modalVisible);
@@ -260,25 +325,25 @@ const CompletedRequests = props => {
                                             <Icon name={'arrow-right-drop-circle'} size={40} style={{ alignSelf: 'center', color: 'white' }} />
                                             <Text style={styles.textStyle}>Start</Text>
                                         </TouchableOpacity> */}
+                                        </View>
                                     </View>
+
+
                                 </View>
-                               
+
 
                             </View>
+                        );
+                    })
+                }
 
-
-                        </View>
-                    );
-                })
-            }
-                
             </View>
         </ScrollView>
 
 
 
     );
-            
+
 };
 
 const styles = StyleSheet.create({

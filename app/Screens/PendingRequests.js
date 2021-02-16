@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableHighlight, TouchableOpacity, Linking, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Block from '../Components/Block';
-import { ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import * as orderDetailsActions from '../actions/orderDetails';
 import { Dimensions } from 'react-native';
@@ -21,7 +21,10 @@ import { Button, Divider } from 'react-native-paper';
 const PendingRequests = props => {
     const language = useSelector(state => state.application.language);
     const navigation = useNavigation();
-    const pendingOrders = useSelector(state => state.orders.pendingOrders);
+    // const phoneNumber = pendingOrders?.phone ? pendingOrders.phone : 'Not available';
+    const driverInfoFromRedux = useSelector(state => state.auth.driverInfoList);
+
+    const pendingOrders = useSelector(state => state?.orders?.pendingOrders ? state.orders.pendingOrders : null);
     // console.log('pendiiiiiiiiiiiiiiiiiiiiiiiiign');
     // console.log(pendingOrders.id);
     // console.log('pendiiiiiiiiiiiiiiiiiiiiiiiiign');
@@ -29,19 +32,26 @@ const PendingRequests = props => {
     const [error, setError] = useState();
     const [modalVisible, setModalVisible] = useState(false);
     const userInfo = useSelector(state => state.auth.userInfo);
-    let orderID = 0;
+    const orderDetails = useSelector(state => state.orderDetails.orderDetails ? state.orderDetails.orderDetails : 'no data');
 
 
     let CLientName = language == 'EN' ? 'Client Name' : 'اسم العميل';
     let OrderPrice = language == 'EN' ? 'OrderPrice' : 'سعر الطلب';
     let DeliveryPrice = language == 'EN' ? 'Delivery Price' : 'سعر التوصيل';
     let Commission = language == 'EN' ? 'Commission' : 'العمولة';
-    let pickUp = language == 'EN' ? 'pickUp' : 'التسليم';
+    let pickUp = language == 'EN' ? 'PickUp' : 'التسليم';
     let destination = language == 'EN' ? 'Destination' : 'الوجهة';
     let orderDate = language == 'EN' ? 'Order Date' : 'تاريخ الطلب';
     let orderTime = language == 'EN' ? 'Order Time' : 'وقت الطلب';
     let Start = language == 'EN' ? 'Start' : 'البدء';
     let Details = language == 'EN' ? 'Details' : 'التفاصيل';
+    let UWannaSTart = language == 'EN' ? 'Do you want to start ?' : 'هل تريد البدأ ؟';
+    let Yes = language == 'EN' ? 'Yes' : 'نعم';
+    let Cancel = language == 'EN' ? 'Cancel' : 'إلغاء';
+    let notAvailable = language == 'EN' ? 'not available' : 'غير متوفر';
+    let ShiftWarningTitle = language == 'EN' ? 'Start Shift First' : ' ابدأ مناوبة اولا';
+    let ShiftWarningBody = language == 'EN' ? 'please start shift before from home screen' : 'يرجى بدأ المناوبة من الشاشة الرئيسية اولا';
+    let orderPhoneNumber = language == 'EN' ? 'Phone number' : 'رقم الهاتف';
 
 
 
@@ -71,6 +81,7 @@ const PendingRequests = props => {
         try {
             // console.log('clicked')
             await dispatch(action);
+            navigation.navigate('OrderDetails');
             console.log('handleorders started working from homescreen');
 
         } catch (err) {
@@ -82,7 +93,70 @@ const PendingRequests = props => {
             console.log('err msg is');
         }
     };
+    const {
+        width,
+        height,
+    } = Dimensions.get('window');
+    console.warn(width);
+    // console.warn(height);
 
+    function fontSizerBig(screenWidth) {
+        if (screenWidth >= 800) {
+            return 35;
+        } else if (screenWidth >= 370) {
+            return 20;
+        } else if (screenWidth >= 250) {
+            return 20;
+        } else {
+            return 12;
+        }
+    }
+    function fontSizerMedium(screenWidth) {
+        if (screenWidth >= 800) {
+            return 35;
+        } else if (screenWidth >= 370) {
+            return 18;
+        } else if (screenWidth >= 250) {
+            return 18;
+        } else {
+            return 12;
+        }
+    }
+    function fontSizerSmall(screenWidth) {
+        if (screenWidth >= 800) {
+            return 32;
+        } else if (screenWidth >= 370) {
+            return 16;
+        } else if (screenWidth >= 250) {
+            return 15;
+        } else {
+            return 12;
+        }
+    }
+    // console.warn(marginTopScreenSize(width));
+
+    function marginTopScreenSize(screenWidth) {
+        if (screenWidth >= 420) {
+            return '8%';
+        } else if (screenWidth >= 390) {
+            return '25%';
+        } else if (screenWidth >= 250) {
+            return '40%';
+        } else {
+            return '40%';
+        }
+    }
+    function iconSizeRelative(screenWidth) {
+        if (screenWidth >= 800) {
+            return 60;
+        } else if (screenWidth >= 370) {
+            return 40;
+        } else if (screenWidth >= 250) {
+            return 30;
+        } else {
+            return 20;
+        }
+    }
     return (
         <ScrollView
             style={styles.screen}
@@ -104,7 +178,7 @@ const PendingRequests = props => {
                                     <View
                                         style={{
                                             // flex: 4,
-                                            height: Dimensions.get('window').height / 4 + 20,
+                                            height: height / 3,
                                             // backgroundColor: 'yellow',
                                         }}
                                     >
@@ -113,17 +187,18 @@ const PendingRequests = props => {
                                             style={{
                                                 flexDirection: language == 'EN' ? 'row' : 'row-reverse',
                                                 alignItems: 'center',
-                                                marginVertical: 10,
+                                                marginVertical: 5,
                                             }}
                                         >
 
-                                            <Icon name={'face-profile'} size={30} style={{ color: colors.white, marginRight: 10 }} />
+                                            <Icon name={'face-profile'} size={30} style={{ color: colors.white, marginRight: 0 }} />
 
                                             <Text
                                                 style={{
                                                     ...styles.textDetails,
                                                     color: colors.white,
-                                                    fontSize: 25
+                                                    fontSize: fontSizerBig(width),
+                                                    marginLeft: 10
                                                 }}
                                             >
                                                 {/* {'Fares Saab'} */}
@@ -131,6 +206,59 @@ const PendingRequests = props => {
                                                 {': '}
                                                 {order.clientname}
                                             </Text>
+                                        </View>
+                                        <Divider />
+                                        <View
+                                            style={{
+                                                flexDirection: language == 'EN' ? 'row' : 'row-reverse',
+                                                justifyContent: 'flex-start',
+                                                alignItems: 'center',
+                                                marginVertical: 10,
+                                            }}
+                                        >
+
+                                            <Icon name={'face-profile'} size={30} style={{ color: 'white', marginRight: 0 }} />
+
+                                            <Text
+                                                style={{
+                                                    ...styles.textDetails,
+                                                    color: 'white',
+                                                    fontSize: fontSizerMedium(width),
+                                                    marginLeft: 10,
+                                                }}
+                                            >
+                                                {/* {'Fares Saab'} */}
+                                                {orderPhoneNumber}
+                                                {': '}
+                                                {order.phone ? order.phone : notAvailable}
+                                            </Text>
+                                            {order.phone
+                                                ?
+                                                <TouchableOpacity
+                                                    style={{
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        marginHorizontal: 20,
+                                                        height: 30,
+                                                        // width: 50,
+                                                        // backgroundColor: colors.primary,
+                                                        borderRadius: 10,
+                                                        paddingHorizontal: 10,
+                                                        // paddingHorizontal: 10,
+                                                    }}
+                                                    onPress={() => {
+
+                                                    }}
+                                                >
+                                                    <Icon name={'phone'} size={30} style={{ color: colors.green, marginRight: 10 }}
+                                                        onPress={() => {
+                                                            Linking.openURL(`tel:${order.phone}`)
+                                                        }}
+                                                    />
+                                                </TouchableOpacity>
+                                                :
+                                                null}
+
                                         </View>
 
 
@@ -150,7 +278,7 @@ const PendingRequests = props => {
                                             <Icon name={'clock'} size={30} style={{ color: colors.white }} />
 
                                             <Text
-                                                style={{ ...styles.textDetails, fontSize: 25, marginLeft: 10, fontWeight: 'normal', color: colors.white }}
+                                                style={{ ...styles.textDetails, fontSize: fontSizerMedium(width), marginLeft: 10, fontWeight: 'normal', color: colors.white }}
                                             >
                                                 {pickUp}{': '} {order.pickup}
                                             </Text>
@@ -164,7 +292,7 @@ const PendingRequests = props => {
 
                                             <Icon name={'car-hatchback'} size={30} style={{ color: colors.white }} />
                                             <Text
-                                                style={{ ...styles.textDetails, fontSize: 25, color: colors.white, marginLeft: 10, fontWeight: 'normal' }}
+                                                style={{ ...styles.textDetails, fontSize: fontSizerMedium(width), color: colors.white, marginLeft: 10, fontWeight: 'normal' }}
                                             >
                                                 {destination}{': '} {order.destination}
                                             </Text>
@@ -183,13 +311,13 @@ const PendingRequests = props => {
                                             <Icon name={'calendar-month'} size={30} style={{ color: colors.white }} />
 
                                             <Text
-                                                style={{ ...styles.textDetails, marginLeft: 10, color: colors.white, fontSize: 18 }}
+                                                style={{ ...styles.textDetails, marginLeft: 10, color: colors.white, fontSize: fontSizerSmall(width) }}
                                             >
                                                 {orderDate}{': '} {order.order_date}
                                             </Text>
                                             <Icon name={'clock'} size={30} style={{ color: colors.white, marginLeft: 10 }} />
                                             <Text
-                                                style={{ ...styles.textDetails, marginLeft: 0, color: colors.white, fontSize: 18 }}
+                                                style={{ ...styles.textDetails, marginLeft: 0, color: colors.white, fontSize: fontSizerSmall(width) }}
                                             >
                                                 {order.order_time}
                                             </Text>
@@ -215,19 +343,19 @@ const PendingRequests = props => {
                                         </View> */}
                                         <Divider />
                                         <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: colors.white }}
+                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: colors.white, fontSize: fontSizerSmall(width) }}
                                         >
                                             {OrderPrice}{': '} {order.orderprice}
                                         </Text>
                                         <Divider />
                                         <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: colors.white }}
+                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: colors.white, fontSize: fontSizerSmall(width) }}
                                         >
                                             {DeliveryPrice}{': '} {order.deliveryprice}
                                         </Text>
                                         <Divider />
                                         <Text
-                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: colors.white }}
+                                            style={{ ...styles.textDetails, fontWeight: 'normal', marginLeft: 40, marginVertical: 5, color: colors.white, fontSize: fontSizerSmall(width) }}
                                         >
                                             {Commission}{': '} {order.commission}
                                         </Text>
@@ -235,7 +363,7 @@ const PendingRequests = props => {
 
 
                                     <View
-                                        style={{ flex: 1, height: Dimensions.get('window').height / 12, width: Dimensions.get('window').width - 20, flexDirection: 'row', marginTop: 75, alignSelf: 'center', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, overflow: 'hidden' }}
+                                        style={{ flex: 1, height: height / 10, width: width - 20, flexDirection: 'row', marginTop: marginTopScreenSize(width), alignSelf: 'center', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, overflow: 'hidden' }}
                                     >
                                         <TouchableOpacity
                                             style={{
@@ -250,21 +378,21 @@ const PendingRequests = props => {
 
                                             onPress={
                                                 () => {
-                                                    navigation.navigate('OrderDetails');
                                                     handleSetOrderDetails(order.id); // cahnge it later to order.id from redux, like next line:
+                                                    // navigation.navigate('OrderDetails');
                                                     //   console.log(order.id);
                                                     // handleSetOrders(id, 'pending');
                                                 }
                                             }
                                         >
 
-                                            <Icon name={'eye'} size={40} style={{ alignSelf: 'center', color: Colors.white }} />
+                                            <Icon name={'eye'} size={iconSizeRelative(width)} style={{ alignSelf: 'center', color: Colors.white }} />
                                             <Text
-                                                style={{ ...styles.textStyle, fontFamily: 'open-sans-bold' }}
+                                                style={{ ...styles.textStyle, fontFamily: 'open-sans-bold', fontSize: fontSizerMedium(width) }}
                                             >{Details}</Text>
                                         </TouchableOpacity>
                                         {/* <TouchableOpacity
-                                        style={{ ...styles.openButton, justifyContent: 'center', backgroundColor: "green", alignSelf: 'center', width: (Dimensions.get('window').width - 20) / 2 }}
+                                        style={{ ...styles.openButton2, justifyContent: 'center', backgroundColor: "green", alignSelf: 'center', width: (Dimensions.get('window').width - 20) / 2 }}
                                         onPress={() => {
                                             // setModalVisible(!modalVisible);
                                         }}
@@ -273,17 +401,27 @@ const PendingRequests = props => {
                                         <Text style={styles.textStyle}>{Start}</Text>
                                     </TouchableOpacity> */}
                                         <TouchableOpacity
-                                            style={{ ...styles.openButton, justifyContent: 'center', backgroundColor: "green", alignSelf: 'center', width: (Dimensions.get('window').width - 20) / 2 }}
+                                            style={{ ...styles.openButton, justifyContent: 'center', height: '100%', backgroundColor: colors.green, alignSelf: 'center', width: (width - 20) / 2 }}
                                             onPress={() => {
-                                                setModalVisible(!modalVisible);
+                                                driverInfoFromRedux.status == 0 ?
+                                                    Alert.alert(
+                                                        ShiftWarningTitle,
+                                                        ShiftWarningBody
+                                                    )
+                                                    :
+
+
+                                                    setModalVisible(!modalVisible);
                                                 console.log(modalVisible);
-                                                orderID = order.id;
+
                                             }}
+                                        // disabled={driverInfoFromRedux.status == 0 ? true : false}
+
                                         >
 
 
-                                            <Icon name={'arrow-right-drop-circle'} size={40} style={{ alignSelf: 'center', color: 'white' }} />
-                                            <Text style={styles.textStyle}>Start</Text>
+                                            <Icon name={'arrow-right-drop-circle'} size={iconSizeRelative(width)} style={{ alignSelf: 'center', color: 'white' }} />
+                                            <Text style={{ ...styles.textStyle, fontSize: fontSizerMedium(width) }}>{Start}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -303,7 +441,7 @@ const PendingRequests = props => {
                                 <View style={styles.centeredView}>
                                     <View style={styles.modalView}>
 
-                                        <Text style={{ ...styles.textStyle, color: 'black' }}>Do you want to start?</Text>
+                                        <Text style={{ ...styles.textStyle, color: 'black' }}>{UWannaSTart}</Text>
 
                                         {/* {orderDetails.status === 'pending' 
                         ?
@@ -314,31 +452,36 @@ const PendingRequests = props => {
                         } */}
 
                                         <View
-                                            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 20, height: 100 }}
+                                            style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-evenly', alignItems: 'center', marginVertical: 20, height: Dimensions.get('screen').height / 7 }}
                                         >
 
-
-                                            <Button
-                                                style={{ marginHorizontal: 20 }}
-                                                mode="contained" onPress={() => {
+                                            <TouchableOpacity
+                                                style={{ ...styles.openButton2, backgroundColor: colors.green }}
+                                                onPress={() => {
                                                     setModalVisible(!modalVisible);
                                                     console.log(modalVisible);
                                                     handleOrderStatus(
-                                                        orderID,
-                                                        3,
+                                                        orderDetails.id,
+                                                        userInfo.id,
                                                         'running');
-                                                }}>
-                                                Yes
-                                                 </Button>
+                                                }}
+                                            >
+                                                <Text
+                                                    style={{ ...styles.textDetails, fontSize: 20 }}
+                                                >{Yes}</Text>
+                                            </TouchableOpacity>
 
-                                            <Button
-                                                style={{ marginHorizontal: 20 }}
-                                                mode="contained" onPress={() => {
+                                            <TouchableOpacity
+                                                style={{ ...styles.openButton2, backgroundColor: colors.red, }}
+                                                onPress={() => {
                                                     setModalVisible(!modalVisible);
                                                     console.log(modalVisible);
-                                                }}>
-                                                Cancel
-                                                 </Button>
+                                                }}
+                                            >
+                                                <Text
+                                                    style={{ ...styles.textDetails, fontSize: 20 }}
+                                                >{Cancel}</Text>
+                                            </TouchableOpacity>
                                         </View>
                                     </View>
                                 </View>
@@ -381,6 +524,21 @@ const styles = StyleSheet.create({
         elevation: 10,
         // width:'80%',
         // marginTop:10,
+
+    },
+    openButton2: {
+        backgroundColor: "#F194FF",
+        // flex: 1,
+        // padding: 10,
+        // marginTop:10,
+        padding: 8,
+        borderRadius: 10,
+        height: 50,
+        maxHeight: 50,
+        elevation: 10,
+        width: 150,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     textDetails: {
         fontFamily: 'open-sans-bold',
@@ -417,7 +575,7 @@ const styles = StyleSheet.create({
         width: '90%',
         backgroundColor: colors.white,
         borderRadius: 20,
-        padding: 35,
+        paddingVertical: 35,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -428,7 +586,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
-    openButton2: {
+    openButton22: {
         backgroundColor: colors.red,
         borderRadius: 10,
         padding: 10,
