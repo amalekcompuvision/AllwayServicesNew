@@ -92,7 +92,7 @@ const CurrentRequests = props => {
             // console.log('clicked')
             console.log('handleorders faced problem in home screen');
             setError(err.message);
-            console.log('err msg is');
+            console.log('err msg is ');
             console.log(err.message);
             console.log('err msg is');
         }

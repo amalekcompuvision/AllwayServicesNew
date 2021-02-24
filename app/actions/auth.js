@@ -96,7 +96,7 @@ export const login = (email, password) => {
 };
 export const setDriverInfo = (driverID) => {
   // console.log(`https://www.allwaytaxi.com/api/driverlogin.php?token=${token}&password=${password}&email=${email}`)
-  console.log(`${baseUrl}/driverinfo.php?token=${token}&driver_id=${driverID}`);
+  // console.log(`${baseUrl}/driverinfo.php?token=${token}&driver_id=${driverID}`);
   return async (dispatch) => {
     const response = await fetch(
       `${baseUrl}/driverinfo.php?token=${token}&driver_id=${driverID}`);

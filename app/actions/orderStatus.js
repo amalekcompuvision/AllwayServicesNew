@@ -12,8 +12,8 @@ export const setOrderStatus = (orderID, driverId, status) => {
   return async (dispatch) => {
     const response = await fetch(
       `${baseUrl}/orderstatus.php?token=${token}&driver_id=${driverId}&status=${status}&order_id=${orderID}`);
-      console.log('maaaaaaaaaaiiiiiiiiiiillllllllllllllllllllllllllllllllllll');
-      console.log(`${baseUrl}/orderstatus.php?token=${token}&driver_id=${driverId}&status=${status}&order_id=${orderID}`);
+    console.log('maaaaaaaaaaiiiiiiiiiiillllllllllllllllllllllllllllllllllll');
+    console.log(`${baseUrl}/orderstatus.php?token=${token}&driver_id=${driverId}&status=${status}&order_id=${orderID}`);
     const resData = await response.json();
     //   console.log('staaaaaaaaaaaaaaaaaaaaaaaaatuuuuuuuuuuuuuuuuuuuuuuusAPIIIIIIIIIIIIIIIIdataaaaaaaaa');
     //   console.log(resData);
@@ -24,20 +24,20 @@ export const setOrderStatus = (orderID, driverId, status) => {
         type: 'nothing',
         orders: resData,
       });
-     // dispach to refresh incoming orders and pending counter and running counter
-     // see how to resend dispatches for above reducers from here
-      
+      // dispach to refresh incoming orders and pending counter and running counter
+      // see how to resend dispatches for above reducers from here
+
     }
 
 
-      
-      // if (status == 'pending') {
 
-      // }
+    // if (status == 'pending') {
+
+    // }
 
 
-      
-      
+
+
 
   };
 
@@ -49,8 +49,8 @@ export const setOrderStatusIfPaid = (isPaid, orderID) => {
   return async (dispatch) => {
     const response = await fetch(
       `${baseUrl}/orderpaid.php?token=${token}&order_id=${orderID}&paid=${isPaid}`);
-      console.log('ansdlkasndkljaskldnjaskldjaskldjjklasndkjasbnkasjbciawbsjkchsugbwvuocvbahcyuacvhagdcwo')
-      console.log(`${baseUrl}/orderpaid.php?token=${token}&order_id=${orderID}&paid=${isPaid}`);
+    console.log('ansdlkasndkljaskldnjaskldjaskldjjklasndkjasbnkasjbciawbsjkchsugbwvuocvbahcyuacvhagdcwo')
+    console.log(`${baseUrl}/orderpaid.php?token=${token}&order_id=${orderID}&paid=${isPaid}`);
     const resData = await response.json();
     //   console.log('staaaaaaaaaaaaaaaaaaaaaaaaatuuuuuuuuuuuuuuuuuuuuuuusAPIIIIIIIIIIIIIIIIdataaaaaaaaa');
     //   console.log(resData);
@@ -61,20 +61,11 @@ export const setOrderStatusIfPaid = (isPaid, orderID) => {
         type: 'nothing',
         orders: resData,
       });
-     // dispach to refresh incoming orders and pending counter and running counter
-     // see how to resend dispatches for above reducers from here
-      
+      // dispach to refresh incoming orders and pending counter and running counter      
     }
 
 
-      
-      // if (status == 'pending') {
 
-      // }
-
-
-      
-      
 
   };
 

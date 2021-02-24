@@ -171,10 +171,10 @@ const Home = props => {
     );
     try {
       await dispatch(action);
-      // console.log('set counter started working from homescreen');
+      // console.log(' started working from homescreen');
 
     } catch (err) {
-      // console.log('set counter faced problem in home screen');
+      // console.log('faced problem in home screen');
       setError(err.message);
       console.log(err.message);
     }
